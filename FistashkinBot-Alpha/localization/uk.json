@@ -1,0 +1,205 @@
+{
+	"CONTEXT_MENU_COMMAND_AVATAR": "Аватар",
+	"CONTEXT_MENU_COMMAND_USERINFO": "Користувач",
+
+	"TARGET_USER_NAME": "учасник",
+	"TARGET_USER_DESCRIPTION": "Виберіть учасника.",
+
+	"TARGET_ROLE_NAME": "роль",
+	"TARGET_ROLE_DESCRIPTION": "Виберіть роль.",
+
+	"TARGET_REASON_NAME": "причина",
+	"TARGET_REASON_DESCRIPTION": "Вкажіть причину.",
+
+	"HELP_COMMAND_NAME": "хелп",
+	"HELP_COMMAND_DESCRIPTION": "Показує список доступних команд бота.",
+
+	"FAQ_COMMAND_NAME": "чаво",
+	"FAQ_COMMAND_DESCRIPTION": "Перегляд часто задаваних питань.",
+	"FAQ_QUESTION_COMMAND_NAME": "питання",
+	"FAQ_QUESTION_COMMAND_DESCRIPTION": "Виберіть своє питання тут.",
+
+	"USER_INFO_COMMAND_NAME": "користувач",
+	"USER_INFO_COMMAND_DESCRIPTION": "Показує інформацію про учасника.",
+
+	"SERVER_INFO_COMMAND_NAME": "сервер",
+	"SERVER_INFO_COMMAND_DESCRIPTION": "Показує інформацію про сервер.",
+
+	"AVATAR_COMMAND_NAME": "аватар",
+	"AVATAR_COMMAND_DESCRIPTION": "Показує аватар згаданого учасника або учасника, що викликав команду.",
+
+	"ROLES_LIST_COMMAND_NAME": "ролі",
+	"ROLES_LIST_COMMAND_DESCRIPTION": "Показує всі ролі сервера.",
+
+	"BOT_INFO_COMMAND_NAME": "інфо",
+	"BOT_INFO_COMMAND_DESCRIPTION": "Показує цікаву інформацію про бота.",
+
+	"BOT_STATS_COMMAND_NAME": "стат",
+	"BOT_STATS_COMMAND_DESCRIPTION": "Показує статистику бота.",
+
+	"BOT_PING_COMMAND_NAME": "пінг",
+	"BOT_PING_COMMAND_DESCRIPTION": "Тестування функціоналу та затримок бота.",
+
+	"CLIST_COMMAND_NAME": "клист",
+  "CLIST_COMMAND_DESCRIPTION": "Відображає список учасників з обраною роллю.",
+
+	"ROLEINFO_COMMAND_NAME": "рольінфо",
+  "ROLEINFO_COMMAND_DESCRIPTION": "Відображає інформацію про будь-яку роль на сервері.",
+
+	"EMOJI_RANDOM_COMMAND_NAME": "емодзі",
+	"EMOJI_RANDOM_COMMAND_DESCRIPTION": "Знаходить рандомний емодзі.",
+
+	"USER_BIO_COMMAND_NAME": "просебе",
+	"USER_BIO_COMMAND_DESCRIPTION": "Змінює біографію учасника.",
+	"USER_BIO_TEXT_NAME": "біо",
+	"USER_BIO_TEXT_DESCRIPTION": "Ви можете вказати свій текст, щоб очистити, напишіть 'очистити'.",
+
+	"MONITORING_COMMAND_NAME": "моніторинг",
+	"MONITORING_COMMAND_DESCRIPTION": "Відображає моніторинги, на яких присутній бот.",
+
+	"GITHUB_COMMAND_NAME": "гітхаб",
+	"GITHUB_COMMAND_DESCRIPTION": "Інформація про репозиторій Github.",
+	"GITHUB_ARG_NAME": "репозиторій",
+	"GITHUB_ARG_DESCRIPTION": "Вкажіть назву репозиторія в форматі nick/repository.",
+
+	"MUSIC_PLAY_COMMAND_NAME": "грати",
+  "MUSIC_PLAY_COMMAND_DESCRIPTION": "Відтворення музики в голосовому каналі.",
+  "MUSIC_PLAY_TEXT_COMMAND_NAME": "назва",
+  "MUSIC_PLAY_TEXT_COMMAND_DESCRIPTION": "Вкажіть посилання або назву треку.",
+
+  "MUSIC_VOLUME_COMMAND_NAME": "гучність",
+  "MUSIC_VOLUME_COMMAND_DESCRIPTION": "Налаштування гучності плеєра.",
+  "MUSIC_VOLUME_TEXT_COMMAND_NAME": "значення",
+  "MUSIC_VOLUME_TEXT_COMMAND_DESCRIPTION": "Вкажіть значення у діапазоні від 0 до 200.",
+
+	"USER_BALANCE_COMMAND_NAME": "баланс",
+	"USER_BALANCE_COMMAND_DESCRIPTION": "Показує баланс згаданого учасника або учасника, що викликав команду.",
+
+	"USER_RANK_COMMAND_NAME": "ранг",
+	"USER_RANK_COMMAND_DESCRIPTION": "Показує ранг згаданого учасника або учасника, що викликав команду.",
+
+	"PAY_COMMAND_NAME": "переказ",
+	"PAY_COMMAND_DESCRIPTION": "Переказує гроші учаснику.",
+	"PAY_AMOUNT_NAME": "сума",
+	"PAY_AMOUNT_DESCRIPTION": "Сума, яку ви хочете переказати учаснику.",
+
+	"LEADERBOARD_COMMAND_NAME": "лідери",
+	"LEADERBOARD_COMMAND_DESCRIPTION": "Показує топ рейтингу учасників за чимось.",
+
+	"LEADERBOARD_BALANCE_COMMAND_NAME": "баланс",
+	"LEADERBOARD_BALANCE_COMMAND_DESCRIPTION": "Показує топ рейтингу учасників за балансом.",
+
+	"LEADERBOARD_RANK_COMMAND_NAME": "ранг",
+	"LEADERBOARD_RANK_COMMAND_DESCRIPTION": "Показує топ рейтингу учасників за досвідом.",
+
+	"SHOP_COMMAND_NAME": "магазин",
+	"SHOP_COMMAND_DESCRIPTION": "Магазин, де ви можете купити ролі.",
+
+	"SLOT_MACHINE_COMMAND_NAME": "слот",
+	"SLOT_MACHINE_COMMAND_DESCRIPTION": "Гра на ігровому автоматі.",
+	"SLOT_MACHINE_COMMAND_TEXT_NAME": "сума",
+	"SLOT_MACHINE_COMMAND_TEXT_DESCRIPTION": "Вкажіть суму, на яку збираєтеся поіграти.",
+
+	"BONUS_COMMAND_NAME": "бонус",
+	"BONUS_COMMAND_DESCRIPTION": "Видає бонус учаснику.",
+
+	"COIN_COMMAND_NAME": "монетка",
+	"COIN_COMMAND_DESCRIPTION": "Цікава гра в орла і решку.",
+	"COIN_COMMAND_TEXT_NAME": "сума",
+	"COIN_COMMAND_TEXT_DESCRIPTION": "Вкажіть суму, на яку збираєтеся поіграти.",
+
+	"FIGHT_CLUB_COMMAND_NAME": "бойовий_клуб",
+	"FIGHT_CLUB_COMMAND_DESCRIPTION": "Перше правило бойового клубу...",
+	"FIGHT_CLUB_COMMAND_TEXT_NAME": "сума",
+	"FIGHT_CLUB_COMMAND_TEXT_DESCRIPTION": "Вкажіть суму, на яку збираєтеся поіграти.",
+
+	"CASE_COMMAND_NAME": "кейси",
+	"CASE_COMMAND_DESCRIPTION": "Відкривайте кейси з приємними бонусами.",
+
+	"EIGHT_BALL_COMMAND_NAME": "шар",
+	"EIGHT_BALL_COMMAND_DESCRIPTION": "Відповідає на питання учасника.",
+	"EIGHT_BALL_COMMAND_TEXT_NAME": "питання",
+	"EIGHT_BALL_COMMAND_TEXT_DESCRIPTION": "Введіть своє питання.",
+
+	"INTERACTION_COMMAND_NAME": "взаємодія",
+	"INTERACTION_COMMAND_DESCRIPTION": "Взаємодіяти з учасником.",
+	"INTERACTION_COMMAND_CHOICE_NAME": "вибір",
+	"INTERACTION_COMMAND_CHOICE_DESCRIPTION": "Виберіть, яку взаємодію ви хочете здійснити.",
+
+	"ANIME_CHAN_COMMAND_NAME": "аніме-тян",
+	"ANIME_CHAN_COMMAND_DESCRIPTION": "Аніме-тян!",
+	"ANIME_CHAN_CHOICE_NAME": "вибір",
+	"ANIME_CHAN_CHOICE_DESCRIPTION": "Виберіть тег з аніме-тян.",
+
+	"ANIMAL_COMMAND_NAME": "тварини",
+	"ANIMAL_COMMAND_DESCRIPTION": "Виводить випадкове фото обраної тварини.",
+	"ANIMAL_CHOICE_NAME": "вибір",
+	"ANIMAL_CHOICE_DESCRIPTION": "Виберіть тварину.",
+
+	"GUESS_GAME_COMMAND_NAME": "здогадайся",
+	"GUESS_GAME_COMMAND_DESCRIPTION": "Здогадайтесь, що показано на малюнку.",
+	"GUESS_GAME_CHOICE_NAME": "вибір",
+	"GUESS_GAME_CHOICE_DESCRIPTION": "Виберіть категорію.",
+
+	"NSFW_COMMAND_NAME": "нсфв",
+	"NSFW_COMMAND_DESCRIPTION": "Ну... Це було непогано.",
+	"NSFW_COMMAND_CHOICE_NAME": "вибір",
+	"NSFW_COMMAND_CHOICE_DESCRIPTION": "Виберіть щось зі списку.",
+
+	"MINESWEEPER_COMMAND_NAME": "сапер",
+	"MINESWEEPER_COMMAND_DESCRIPTION": "Зіграйте в міні-гру Сапер.",
+
+	"ROLLDICE_COMMAND_NAME": "кубик",
+	"ROLLDICE_COMMAND_DESCRIPTION": "Зіграйте в міні-гру з кидком кубика.",
+
+	"MUTE_COMMAND_NAME": "мьют",
+	"MUTE_COMMAND_DESCRIPTION": "Відправляє учасника в таймаут.",
+	"MUTE_COMMAND_TEXT_NAME": "час",
+	"MUTE_COMMAND_TEXT_DESCRIPTION": "Вкажіть час (Приклад: 10с, де с - секунди, х - хвилини, г - години, д - дні).",
+
+	"UNMUTE_COMMAND_NAME": "розмьют",
+	"UNMUTE_COMMAND_DESCRIPTION": "Знімає покарання з учасника.",
+
+	"KICK_COMMAND_NAME": "кик",
+	"KICK_COMMAND_DESCRIPTION": "Виключає вказаного учасника з сервера з можливістю повернення.",
+
+	"BAN_COMMAND_NAME": "бан",
+	"BAN_COMMAND_DESCRIPTION": "Виключає вказаного учасника з сервера назавжди.",
+
+	"UNBAN_COMMAND_NAME": "розбан",
+	"UNBAN_COMMAND_DESCRIPTION": "Розблокує вказаного учасника на сервері за його ID, ім'ям або тегом.",
+
+	"DELAY_CHAT_COMMAND_NAME": "затримка",
+	"DELAY_CHAT_COMMAND_DESCRIPTION": "Встановлює затримку для спілкування.",
+	"DELAY_CHAT_COMMAND_TEXT_NAME": "секунди",
+	"DELAY_CHAT_COMMAND_TEXT_DESCRIPTION": "Вкажіть час затримки в секундах.",
+
+	"CLEAR_COMMAND_NAME": "очищення",
+	"CLEAR_COMMAND_DESCRIPTION": "Очищає вказану кількість повідомлень в каналі.",
+	"CLEAR_COMMAND_TEXT_NAME": "кількість",
+	"CLEAR_COMMAND_TEXT_DESCRIPTION": "Вкажіть кількість повідомлень.",
+
+	"GIVE_WARN_COMMAND_NAME": "попередження",
+	"GIVE_WARN_COMMAND_DESCRIPTION": "Видає попередження учаснику.",
+
+	"WARNS_COMMAND_NAME": "попередження",
+	"WARNS_COMMAND_DESCRIPTION": "Показує всі видачі попереджень учаснику.",
+
+	"REMOVE_WARNS_COMMAND_NAME": "сброспопередження",
+	"REMOVE_WARNS_COMMAND_DESCRIPTION": "Прибирає всі видані попередження учаснику.",
+
+	"SETTING_COMMAND_NAME": "налаштування",
+	"SETTING_COMMAND_DESCRIPTION": "Показує вид налаштувань.",
+
+	"SETTING_VOICE_COMMAND_NAME": "голос",
+	"SETTING_VOICE_COMMAND_DESCRIPTION": "Налаштування приватних голосових кімнат для сервера.",
+
+	"SETTING_SHOP_COMMAND_NAME": "магазин",
+	"SETTING_SHOP_COMMAND_DESCRIPTION": "Налаштування магазину ролей для сервера.",
+
+	"SETTING_LOGS_COMMAND_NAME": "логи",
+	"SETTING_LOGS_COMMAND_DESCRIPTION": "Налаштування журналів для сервера.",
+
+	"SETTING_AUTOMOD_COMMAND_NAME": "автомод",
+	"SETTING_AUTOMOD_COMMAND_DESCRIPTION": "Налаштування автомоду для сервера."
+}

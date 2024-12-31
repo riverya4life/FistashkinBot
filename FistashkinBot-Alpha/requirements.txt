@@ -1,0 +1,14 @@
+asyncio
+aiohttp
+aiosqlite
+environs
+disnake==2.10.1
+disnake-jishaku
+easy_pil
+bs4
+humanize
+psutil
+loguru
+mafic
+setup-tools
+git+https://github.com/DisnakeCommunity/disnake-ext-components

@@ -1,0 +1,31 @@
+[flake8]
+max-line-length = 100
+statistics = true
+count = true
+
+noqa-require-code = true
+pytest-mark-no-parentheses = true
+
+exclude =
+    .git
+    __pycache__
+    .nox
+    .eggs
+    *.egg
+    *.egg-info
+    .vscode
+    .venv
+    venv
+    .mypy_cache
+    .pytest_cache
+    build
+    test_bot
+
+ignore =
+    W504,
+    E731,
+    F401, 
+    F403,
+    F821,
+    F811,
+    F841,

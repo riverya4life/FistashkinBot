@@ -1,0 +1,18 @@
+{
+    "name": "fistashkinbot",
+    "version": "1.8 Alpha (<t:1717849776:d>)",
+    "main": "main.py",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/fistashkinbot/FistashkinBot-Beta.git"
+    },
+    "author": "riverya4life",
+    "license": "MIT License (old: GPL-3.0)",
+    "bugs": {
+        "url": "https://github.com/fistashkinbot/FistashkinBot-Beta/issues"
+    },
+    "homepage": "https://github.com/fistashkinbot/FistashkinBot-Beta/blob/main/README.md",
+    "dependencies": {
+        "disnake": "^2.10.1"
+    }
+}
