@@ -1,6 +1,6 @@
 {
     "name": "fistashkinbot",
-    "version": "1.8 Alpha (<t:1717849776:d>)",
+    "version": "1.9 Alpha (<t:1717849776:d>)",
     "main": "main.py",
     "repository": {
         "type": "git",
