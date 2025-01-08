@@ -31,43 +31,44 @@ class BioButtons(disnake.ui.View):
                 ),
                 ephemeral=True,
             )
+
         await inter.response.send_modal(modal=InputSetBioUser())
 
     @disnake.ui.button(
         label="Удалить биографию", emoji="❎", style=disnake.ButtonStyle.red
     )
     async def remove_bio(self, button: disnake.ui.Button, inter):
-        bio = await db.get_bio(member=inter.author)
         if not inter.user == self.inter.author:
             return await inter.response.send_message(
                 embed=disnake.Embed(
-                    description=f"❌ | Вы не можете этого сделать! Запустите команду самостоятельно, чтобы использовать эти кнопки.",
+                    description="❌ | Вы не можете этого сделать! Запустите команду самостоятельно, чтобы использовать эти кнопки.",
                     color=self.color.RED,
                 ),
                 ephemeral=True,
             )
-        elif (
-            bio
-            == "Вы можете добавить сюда какую-нибудь полезную информацию о себе командой `/осебе`"
-        ):
+
+        bio = await db.get_bio(member=inter.author)
+
+        if not bio or bio == "Вы можете добавить сюда какую-нибудь полезную информацию о себе командой `/осебе`":
             return await inter.response.send_message(
                 embed=disnake.Embed(
-                    description=f"❌ | Как вы можете удалить биографию, если у вас её нету?",
+                    description="❌ | Как вы можете удалить биографию, если у вас её нету?",
                     color=self.color.RED,
                 ),
                 ephemeral=True,
             )
+
         await db.remove_bio(member=inter.author)
-        embed = (
-            disnake.Embed(
-                description="✅ Информация успешно удалена, проверьте командой `/юзер`, либо опять вызовите эту команду.",
-                color=self.color.MAIN,
-            )
-            .set_author(
-                name=f"Биография {inter.author}", icon_url=inter.author.display_avatar.url
-            )
+
+        embed = disnake.Embed(
+            description="✅ Информация успешно удалена, проверьте командой `/юзер`, либо вызовите эту команду снова.",
+            color=self.color.MAIN,
+        ).set_author(
+            name=f"Биография {inter.author}", icon_url=inter.author.display_avatar.url
         )
+
         await inter.response.edit_message(embed=embed, view=None)
+
 
 
 class InputSetBioUser(disnake.ui.Modal):

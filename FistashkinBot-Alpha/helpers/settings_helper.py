@@ -30,6 +30,7 @@ class TempVoiceButtons(disnake.ui.View):
                 ),
                 ephemeral=True,
             )
+
         await inter.response.send_modal(modal=InputVoiceSettingTrigger())
 
     @disnake.ui.button(
@@ -44,6 +45,7 @@ class TempVoiceButtons(disnake.ui.View):
                 ),
                 ephemeral=True,
             )
+
         await inter.response.send_modal(modal=InputVoiceSetting())
 
     @disnake.ui.button(label="Удалить триггеры", style=disnake.ButtonStyle.red)
@@ -56,6 +58,7 @@ class TempVoiceButtons(disnake.ui.View):
                 ),
                 ephemeral=True,
             )
+
         await inter.response.send_modal(modal=InputVoiceSettingTriggerDelete())
 
 
@@ -84,6 +87,7 @@ class RoleShopButtons(disnake.ui.View):
                 ),
                 ephemeral=True,
             )
+
         await inter.response.send_modal(modal=InputAddRoleShopSettings())
 
     @disnake.ui.button(label="Убрать роли", style=disnake.ButtonStyle.red)
@@ -96,6 +100,7 @@ class RoleShopButtons(disnake.ui.View):
                 ),
                 ephemeral=True,
             )
+
         await inter.response.send_modal(modal=InputDeleteRoleShopSettings())
 
 
@@ -120,22 +125,24 @@ class LogsSetupButtons(disnake.ui.View):
         if not inter.user == self.inter.author:
             return await inter.response.send_message(
                 embed=disnake.Embed(
-                    description=f"❌ | Вы не можете этого сделать! Запустите команду самостоятельно, чтобы использовать эти кнопки.",
+                    description="❌ | Вы не можете этого сделать! Запустите команду самостоятельно, чтобы использовать эти кнопки.",
                     color=self.color.RED,
                 ),
                 ephemeral=True,
             )
-        existing_trigger = await db.get_log_channel(guild=inter.guild)
-        if existing_trigger is not None:
+
+        if await db.get_log_channel(guild=inter.guild):
             return await inter.response.send_message(
                 embed=disnake.Embed(
                     title=f"{self.otheremojis.WARNING} Ошибка!",
-                    description=f"❌ Система логгирования уже установлена.",
+                    description="❌ Система логгирования уже установлена.",
                     color=self.color.RED,
                 ),
                 ephemeral=True,
             )
+
         await inter.response.send_modal(modal=InputAddLogsSettings())
+
 
     @disnake.ui.button(
         label="Установить текущий канал", style=disnake.ButtonStyle.green
@@ -144,68 +151,38 @@ class LogsSetupButtons(disnake.ui.View):
         if not inter.user == self.inter.author:
             return await inter.response.send_message(
                 embed=disnake.Embed(
-                    description=f"❌ | Вы не можете этого сделать! Запустите команду самостоятельно, чтобы использовать эти кнопки.",
+                    description="❌ | Вы не можете этого сделать! Запустите команду самостоятельно, чтобы использовать эти кнопки.",
                     color=self.color.RED,
                 ),
                 ephemeral=True,
             )
+
         try:
             channel = await inter.guild.fetch_channel(inter.channel.id)
-            if not channel:
-                return await inter.send(
-                    embed=disnake.Embed(
-                        title=f"{self.otheremojis.WARNING} Ошибка!",
-                        description="❌ Указанный канал не существует или бот не имеет доступа к нему.",
-                        color=self.color.RED,
-                    ),
-                    ephemeral=True,
-                )
 
-            if isinstance(channel, disnake.CategoryChannel):
-                return await inter.send(
-                    embed=disnake.Embed(
-                        title=f"{self.otheremojis.WARNING} Ошибка!",
-                        description=f"❌ Нельзя использовать категорию для логгирования.",
-                        color=self.color.RED,
-                    ),
-                    ephemeral=True,
-                )
+            invalid_types = {
+                disnake.CategoryChannel: "категорию",
+                disnake.VoiceChannel: "голосовой канал",
+                disnake.Thread: "ветку",
+                disnake.ChannelType.forum: "форум",
+            }
 
-            if isinstance(channel, disnake.VoiceChannel):
-                return await inter.send(
-                    embed=disnake.Embed(
-                        title=f"{self.otheremojis.WARNING} Ошибка!",
-                        description=f"❌ Нельзя использовать голосовой канал для логгирования.",
-                        color=self.color.RED,
-                    ),
-                    ephemeral=True,
-                )
+            for channel_type, type_name in invalid_types.items():
+                if channel.type == channel_type:
+                    return await inter.send(
+                        embed=disnake.Embed(
+                            title=f"{self.otheremojis.WARNING} Ошибка!",
+                            description=f"❌ Нельзя использовать {type_name} для логгирования.",
+                            color=self.color.RED,
+                        ),
+                        ephemeral=True,
+                    )
 
-            if isinstance(channel, disnake.Thread):
+            if channel.id == inter.guild.system_channel.id:
                 return await inter.send(
                     embed=disnake.Embed(
                         title=f"{self.otheremojis.WARNING} Ошибка!",
-                        description=f"❌ Нельзя использовать ветки для логгирования.",
-                        color=self.color.RED,
-                    ),
-                    ephemeral=True,
-                )
-
-            if channel.type == disnake.ChannelType.forum:
-                return await inter.send(
-                    embed=disnake.Embed(
-                        title=f"{self.otheremojis.WARNING} Ошибка!",
-                        description=f"❌ Нельзя использовать форум для логгирования.",
-                        color=self.color.RED,
-                    ),
-                    ephemeral=True,
-                )
-
-            if inter.guild.system_channel.id == channel.id:
-                return await inter.send(
-                    embed=disnake.Embed(
-                        title=f"{self.otheremojis.WARNING} Ошибка!",
-                        description=f"❌ Нельзя использовать системный канал для логгирования.",
+                        description="❌ Нельзя использовать системный канал для логгирования.",
                         color=self.color.RED,
                     ),
                     ephemeral=True,
@@ -216,11 +193,12 @@ class LogsSetupButtons(disnake.ui.View):
                 return await inter.send(
                     embed=disnake.Embed(
                         title=f"{self.otheremojis.WARNING} Ошибка!",
-                        description=f"❌ Система логгирования уже установлена.",
+                        description="❌ Система логгирования уже установлена.",
                         color=self.color.RED,
                     ),
                     ephemeral=True,
                 )
+
             await db.insert_log_channel(guild=inter.guild, channel=inter.channel)
             embed = disnake.Embed(
                 description=f"✅ Канал для логгирования успешно установлен! {channel.mention}",
@@ -229,7 +207,7 @@ class LogsSetupButtons(disnake.ui.View):
             await inter.response.send_message(embed=embed, ephemeral=True)
 
         except disnake.errors.Forbidden:
-            return await inter.send(
+            await inter.send(
                 embed=disnake.Embed(
                     title=f"{self.otheremojis.WARNING} Ошибка!",
                     description="❌ Бот не имеет доступа к указанному каналу.",
@@ -238,32 +216,37 @@ class LogsSetupButtons(disnake.ui.View):
                 ephemeral=True,
             )
 
+
     @disnake.ui.button(label="Удалить", style=disnake.ButtonStyle.red)
     async def delete_logs(self, button: disnake.ui.Button, inter):
         if not inter.user == self.inter.author:
             return await inter.response.send_message(
                 embed=disnake.Embed(
-                    description=f"❌ | Вы не можете этого сделать! Запустите команду самостоятельно, чтобы использовать эти кнопки.",
+                    description="❌ | Вы не можете этого сделать! Запустите команду самостоятельно, чтобы использовать эти кнопки.",
                     color=self.color.RED,
                 ),
                 ephemeral=True,
             )
+
         existing_trigger = await db.get_log_channel(guild=inter.guild)
-        if existing_trigger is None:
+        if not existing_trigger:
             return await inter.response.send_message(
                 embed=disnake.Embed(
                     title=f"{self.otheremojis.WARNING} Ошибка!",
-                    description=f"❌ Система логгирования не установлена.",
+                    description="❌ Система логгирования не установлена.",
                     color=self.color.RED,
                 ),
                 ephemeral=True,
             )
+
         await db.remove_log_channel(guild=inter.guild)
-        embed = disnake.Embed(
-            description=f"✅ Канал для логгирования успешно удалён!",
-            color=self.color.GREEN,
+        await inter.response.send_message(
+            embed=disnake.Embed(
+                description="✅ Канал для логгирования успешно удалён!",
+                color=self.color.GREEN,
+            ),
+            ephemeral=True,
         )
-        await inter.response.send_message(embed=embed, ephemeral=True)
 
 
 class InputVoiceSetting(disnake.ui.Modal):
@@ -305,15 +288,23 @@ class InputVoiceSetting(disnake.ui.Modal):
                 reason="Создание временных каналов by FistashkinBot",
             )
             channel = await inter.guild.create_voice_channel(
-                name=name_voice, category=category, user_limit=1
+                name=name_voice,
+                category=category,
+                user_limit=1,
             )
+
             await db.add_voice_channel_trigger(
                 guild=inter.guild, category=category, channel=channel
             )
+
             embed = disnake.Embed(
-                description=f"✅ Так-как Вы создали канал и категорию, теперь триггер для создания каналов установлен в {channel.mention} (Каналы будут созданы в категории {category.mention})"
+                description=(
+                    f"✅ Триггер для создания временных каналов успешно установлен!\n"
+                    f"Канал: {channel.mention}\nКатегория: {category.mention}"
+                ),
+                color=self.color.GREEN,
             )
-            await inter.send(embed=embed, ephemeral=True)
+            await inter.response.send_message(embed=embed, ephemeral=True)
 
         except ValueError:
             return await inter.send(
@@ -363,6 +354,9 @@ class InputVoiceSettingTrigger(disnake.ui.Modal):
             channel = disnake.utils.get(inter.guild.channels, id=id_voice)
             category = disnake.utils.get(inter.guild.categories, id=id_category_voice)
 
+            if not channel or not category:
+                raise ValueError("Указаны некорректные ID канала или категории.")
+
             existing_trigger = await db.get_voice_channel_trigger(
                 guild=inter.guild, channel=channel
             )
@@ -370,31 +364,40 @@ class InputVoiceSettingTrigger(disnake.ui.Modal):
                 return await inter.send(
                     embed=disnake.Embed(
                         title=f"{self.otheremojis.WARNING} Ошибка!",
-                        description=f"❌ Канал {channel.mention} и категория {category.mention} уже существуют в базе данных.",
+                        description=(
+                            f"❌ Триггер уже установлен.\n"
+                            f"Канал: {channel.mention}\nКатегория: {category.mention}"
+                        ),
                         color=self.color.RED,
                     ),
                     ephemeral=True,
                 )
+
             await db.add_voice_channel_trigger(
                 guild=inter.guild, category=category, channel=channel
             )
-            embed = disnake.Embed(
-                description=f"✅ Триггер для создания каналов указан в {channel.mention} (Каналы будут созданы в категории {category.mention})"
-            )
-            await inter.send(embed=embed, ephemeral=True)
 
-        except ValueError:
+            embed = disnake.Embed(
+                description=(
+                    f"✅ Триггер для создания временных каналов успешно установлен!\n"
+                    f"Канал: {channel.mention}\nКатегория: {category.mention}"
+                ),
+                color=self.color.GREEN,
+            )
+            await inter.response.send_message(embed=embed, ephemeral=True)
+
+        except ValueError as e:
             return await inter.send(
                 embed=disnake.Embed(
                     title=f"{self.otheremojis.WARNING} Ошибка!",
-                    description="❌ Вы ввели некорректные данные, попробуйте ещё раз.",
+                    description=f"❌ {str(e)} Попробуйте ещё раз.",
                     color=self.color.RED,
                 ),
                 ephemeral=True,
             )
 
 
-class InputVoiceSettingTriggerDelete(disnake.ui.Modal):
+class InputVoiceSettingTriggerDelete(disnake.ui.Modal): ############ ОСТАНОВКА ТУТ ############
     message: disnake.Message
 
     def __init__(self):
@@ -430,7 +433,6 @@ class InputVoiceSettingTriggerDelete(disnake.ui.Modal):
 
             channel = disnake.utils.get(inter.guild.channels, id=id_voice)
             category = disnake.utils.get(inter.guild.categories, id=id_category_voice)
-            # Проверка наличия канала и категории в базе данных
 
             trigger_data = await db.get_voice_channel_trigger(
                 guild=inter.guild, channel=channel
