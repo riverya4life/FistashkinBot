@@ -44,6 +44,7 @@ class Paginator(disnake.ui.View):
                 ),
                 ephemeral=True,
             )
+
         self.index -= 1
         self._update_state()
 
@@ -61,6 +62,7 @@ class Paginator(disnake.ui.View):
                 ),
                 ephemeral=True,
             )
+            
         await inter.response.send_modal(PageModal(paginator=self))
 
     @disnake.ui.button(emoji="▶", style=disnake.ButtonStyle.secondary)
@@ -75,6 +77,7 @@ class Paginator(disnake.ui.View):
                 ),
                 ephemeral=True,
             )
+
         self.index += 1
         self._update_state()
 
@@ -92,6 +95,7 @@ class Paginator(disnake.ui.View):
                 ),
                 ephemeral=True,
             )
+
         self.stop()
         await self.message.delete()
 
