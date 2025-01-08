@@ -21,9 +21,9 @@ class ContextMenu(commands.Cog):
         self.rating = rating.Rating()
 
     @commands.user_command(
-        name=disnake.Localized("Avatar", key="CONTEXT_MENU_COMMAND_AVATAR"),
-        dm_permission=False,
+        name=disnake.Localized("Avatar", key="CONTEXT_MENU_COMMAND_AVATAR")
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     async def avatar(
         self,
@@ -57,9 +57,9 @@ class ContextMenu(commands.Cog):
         await inter.edit_original_message(embed=embed)
 
     @commands.user_command(
-        name=disnake.Localized("UserInfo", key="CONTEXT_MENU_COMMAND_USERINFO"),
-        dm_permission=False,
+        name=disnake.Localized("UserInfo", key="CONTEXT_MENU_COMMAND_USERINFO")
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     async def userinfo(
         self,
