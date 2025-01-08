@@ -1,52 +1,42 @@
 import disnake
-
 from classes import database as db
 
 
 class Rating:
-    def __init__(self):
-        self.db = db
-
     async def rating_rank(self, member: disnake.Member):
-        rank_data = await self.db.get_data(
+        rank_data = await db.get_data(
             member=member.guild.id,
             all_data=True,
-            filters="ORDER BY level DESC, xp DESC",
+            filters="ORDER BY level DESC, xp DESC"
         )
 
-        user_rank_position = 0
-        for i in range(len(rank_data)):
-            member = member.guild.get_member(rank_data[i][0])
-            if member is not None and not member.bot:
-                user_rank_position = user_rank_position + 1
-                if rank_data[i][0] == member.id:
-                    break
+        rank_data = [
+            (data[0], data[1]) for data in rank_data if member.guild.get_member(data[0]) and not member.guild.get_member(data[0]).bot
+        ]
+        
+        user_rank_position = next(
+            (i + 1 for i, (user_id, _) in enumerate(rank_data) if user_id == member.id), 
+            0
+        )
 
-        users_rank_len = 0
-        for row in rank_data:
-            member = member.guild.get_member(row["member_id"])
-            if member is not member.bot:
-                users_rank_len = users_rank_len + 1
-
+        users_rank_len = len(rank_data)
         return user_rank_position, users_rank_len
 
     async def rating_balance(self, member: disnake.Member):
-        balance_data = await self.db.get_data(
-            member=member.guild.id, all_data=True, filters="ORDER BY balance DESC"
+        balance_data = await db.get_data(
+            member=member.guild.id,
+            all_data=True,
+            filters="ORDER BY balance DESC"
         )
 
-        user_balance_position = 0
-        for i in range(len(balance_data)):
-            member = member.guild.get_member(balance_data[i][0])
-            if member is not None and not member.bot:
-                user_balance_position = user_balance_position + 1
-                if balance_data[i][0] == member.id:
-                    break
+        balance_data = [
+            (data[0], data[1]) for data in balance_data if member.guild.get_member(data[0]) and not member.guild.get_member(data[0]).bot
+        ]
 
-        users_balance_len = 0
-        for row in balance_data:
-            member = member.guild.get_member(row["member_id"])
-            if member is not member.bot:
-                users_balance_len = users_balance_len + 1
+        user_balance_position = next(
+            (i + 1 for i, (user_id, _) in enumerate(balance_data) if user_id == member.id), 
+            0
+        )
 
+        users_balance_len = len(balance_data)
         return user_balance_position, users_balance_len
