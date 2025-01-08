@@ -17,7 +17,7 @@ class FistashkinBot(commands.AutoShardedBot):
             #chunk_guilds_at_startup=False,
             reload=True,
             enable_debug_events=True,
-            test_guilds=[1008029744178143243, 1037792926383747143],
+            #test_guilds=[1008029744178143243, 1037792926383747143, 809899167282364416],
             command_sync_flags=commands.CommandSyncFlags(
                 sync_commands=True,  # Синхронизировать команды
                 sync_commands_debug=True,
