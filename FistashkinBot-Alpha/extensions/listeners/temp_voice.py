@@ -19,14 +19,13 @@ class TempVoice(commands.Cog):
         before: disnake.VoiceState,
         after: disnake.VoiceState,
     ):
-        if after.channel is not None:
-            trigger_info = await db.get_voice_channel_trigger(
-                guild=member.guild, channel=after.channel
-            )
+        if after.channel:
+            trigger_info = await db.get_voice_channel_trigger(guild=member.guild, channel=after.channel)
             if trigger_info and after.channel.id == trigger_info["channel_id"]:
                 guild = self.bot.get_guild(trigger_info["guild_id"])
-                category_id = trigger_info["category_id"]
-                main_category = disnake.utils.get(guild.categories, id=category_id)
+                category = disnake.utils.get(guild.categories, id=trigger_info["category_id"])
+                if not guild or not category:
+                    return
 
                 permissions = {
                     member: disnake.PermissionOverwrite(
@@ -37,19 +36,30 @@ class TempVoice(commands.Cog):
                     )
                 }
 
-                private_voice_channel = await guild.create_voice_channel(
-                    name=f"Комната {member.display_name}",
-                    category=main_category,
-                    bitrate=96000,
-                    overwrites=permissions,
-                )
+                try:
+                    private_voice_channel = await guild.create_voice_channel(
+                        name=f"Комната {member.display_name}",
+                        category=category,
+                        bitrate=96000,
+                        overwrites=permissions,
+                    )
 
-                await member.move_to(private_voice_channel)
-                await self.bot.wait_for(
-                    "voice_state_update",
-                    check=lambda x, y, z: len(private_voice_channel.members) == 0,
-                )
-                await private_voice_channel.delete()
+                    await member.move_to(private_voice_channel)
+
+                    def check_voice_state(before, after, user):
+                        return (
+                            user.id == member.id
+                            and before.channel == private_voice_channel
+                            and len(private_voice_channel.members) == 0
+                        )
+
+                    await self.bot.wait_for("voice_state_update", check=check_voice_state)
+                except Exception as e:
+                    print(f"Ошибка при обработке приватного канала: {e}")
+                finally:
+                    if private_voice_channel:
+                        await private_voice_channel.delete()
+
 
 
 def setup(bot):

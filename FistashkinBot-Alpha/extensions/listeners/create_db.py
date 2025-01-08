@@ -41,10 +41,11 @@ class DB_Event(commands.Cog):
     @commands.Cog.listener(disnake.Event.slash_command_completion)
     @commands.Cog.listener(disnake.Event.user_command_completion)
     async def on_command_completion(self, inter: disnake.ApplicationCommandInteraction):
-        logger.info(
-            f"use: {inter.application_command.qualified_name}, user: {inter.author.name} ({inter.author.id}), guild: {inter.guild.name} ({inter.guild.id})"
-        )
-        return await db.update_used_commands()
+        if inter.type == disnake.InteractionType.application_command:
+            await db.update_used_commands()
+            logger.info(
+                f"use: {inter.application_command.qualified_name}, user: {inter.author.name} ({inter.author.id}), guild: {inter.guild.name} ({inter.guild.id})"
+            )
 
 
 def setup(bot):

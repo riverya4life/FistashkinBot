@@ -26,90 +26,64 @@ class Economy_Event(commands.Cog):
 
         if len(message.content) >= 6:
             data = await db.get_data(message.author)
-            if data["xp"] >= 5 * (data["level"] ** 2) + 50 * data["level"] + 100:
+            required_xp = 5 * (data["level"] ** 2) + 50 * data["level"] + 100
+
+            if data["xp"] >= required_xp:
+                member_id = message.author.id
+                guild_id = message.guild.id
+
                 await db.update_member(
-                    "UPDATE users SET level = level + ? WHERE member_id = ? AND guild_id = ?",
-                    [1, message.author.id, message.guild.id],
-                )
-                await db.update_member(
-                    "UPDATE users SET xp = ? WHERE member_id = ? AND guild_id = ?",
-                    [0, message.author.id, message.guild.id],
+                    """
+                    UPDATE users 
+                    SET level = level + 1, xp = 0 
+                    WHERE member_id = ? AND guild_id = ?
+                    """,
+                    [member_id, guild_id],
                 )
 
                 new_level = self.enum.format_large_number(data["level"] + 1)
                 selected_message = random.choice(self.custom_string.LEVEL_UP_TEXT)
-
-                embed = (
-                    disnake.Embed(
-                        description=selected_message.format(
-                            member=message.author.mention, level=new_level
-                        ),
-                        color=self.color.MAIN,
-                    )
-                    .set_author(
-                        name="Новый уровень!",
-                        icon_url=message.author.display_avatar.url,
-                    )
-                    .set_footer(
-                        text="Уведомление будет удалено в течении 10 секунд!"
-                    )
+                embed = disnake.Embed(
+                    description=selected_message.format(member=message.author.mention, level=new_level),
+                    color=self.color.MAIN,
+                ).set_author(
+                    name="Новый уровень!",
+                    icon_url=message.author.display_avatar.url,
+                ).set_footer(
+                    text="Уведомление будет удалено в течение 10 секунд!"
                 )
                 await message.channel.send(embed=embed, delete_after=10.0)
-
             else:
+                xp_increment = self.economy.EXP_ACCRUAL
+                balance_increment = self.economy.BALANCE_ACCRUAL
+
                 if (
                     message.guild.premium_subscriber_role in message.author.roles
                     or message.author.premium_since
                 ):
-                    await db.update_member(
-                        "UPDATE users SET xp = xp + ? WHERE member_id = ? AND guild_id = ?",
-                        [
-                            self.economy.EXP_ACCRUAL * self.economy.MULTIPLIER,
-                            message.author.id,
-                            message.guild.id,
-                        ],
-                    )
-                    await db.update_member(
-                        "UPDATE users SET total_xp = total_xp + ? WHERE member_id = ? AND guild_id = ?",
-                        [
-                            self.economy.EXP_ACCRUAL * self.economy.MULTIPLIER,
-                            message.author.id,
-                            message.guild.id,
-                        ],
-                    )
-                    await db.update_member(
-                        "UPDATE users SET balance = balance + ? WHERE member_id = ? AND guild_id = ?",
-                        [
-                            self.economy.BALANCE_ACCRUAL * self.economy.MULTIPLIER,
-                            message.author.id,
-                            message.guild.id,
-                        ],
-                    )
-                else:
-                    await db.update_member(
-                        "UPDATE users SET xp = xp + ? WHERE member_id = ? AND guild_id = ?",
-                        [
-                            self.economy.EXP_ACCRUAL,
-                            message.author.id,
-                            message.guild.id,
-                        ],
-                    )
-                    await db.update_member(
-                        "UPDATE users SET total_xp = total_xp + ? WHERE member_id = ? AND guild_id = ?",
-                        [
-                            self.economy.EXP_ACCRUAL,
-                            message.author.id,
-                            message.guild.id,
-                        ],
-                    )
-                    await db.update_member(
-                        "UPDATE users SET balance = balance + ? WHERE member_id = ? AND guild_id = ?",
-                        [
-                            self.economy.BALANCE_ACCRUAL,
-                            message.author.id,
-                            message.guild.id,
-                        ],
-                    )
+                    multiplier = self.economy.MULTIPLIER
+                    xp_increment *= multiplier
+                    balance_increment *= multiplier
+
+                await db.update_member(
+                    """
+                    UPDATE users 
+                    SET 
+                        xp = xp + ?, 
+                        total_xp = total_xp + ?, 
+                        balance = balance + ? 
+                    WHERE 
+                        member_id = ? AND guild_id = ?
+                    """,
+                    [
+                        xp_increment,
+                        xp_increment,
+                        balance_increment,
+                        message.author.id,
+                        message.guild.id,
+                    ],
+                )
+
 
 
 def setup(bot):
