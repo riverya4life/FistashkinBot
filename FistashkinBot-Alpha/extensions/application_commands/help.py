@@ -37,12 +37,27 @@ class Slash_Help(commands.Cog):
 
         return text
 
+    @staticmethod
+    def should_skip_cog(self, cog):
+        """
+        Определяет, должен ли ког быть пропущен на основе наличия атрибута 'hidden' со значением True.
+        Parameters:
+        - cog: Экземпляр кода для проверки.
+
+        Returns:
+        - bool: True, если ког должен быть пропущен, иначе False.
+        """
+        if hasattr(cog, 'hidden') and cog.hidden and len(cog.get_slash_commands()) > 0 and cog.qualified_name:
+            return True
+        return False
+
     @commands.slash_command(
         name=disnake.Localized("help", key="HELP_COMMAND_NAME"),
         description=disnake.Localized(
             "Shows a list of available bot commands.", key="HELP_COMMAND_DESCRIPTION"
         ),
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     async def help(self, inter: disnake.ApplicationCommandInteraction):
         await inter.response.defer(ephemeral=False)
@@ -84,7 +99,7 @@ class Slash_Help(commands.Cog):
             if cog is None:
                 RuntimeError
 
-            if hasattr(cog, 'hidden') and len(cog.get_slash_commands()) > 0 and cog.qualified_name:
+            if self.should_skip_cog(self, cog):
                 continue
 
             text = ""

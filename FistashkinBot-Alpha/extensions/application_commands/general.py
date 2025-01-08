@@ -47,6 +47,7 @@ class General(commands.Cog, name="🛠️ Утилиты"):
             "See the most frequently asked questions.", key="FAQ_COMMAND_DESCRIPTION"
         ),
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     async def faq(
         self,
@@ -87,9 +88,9 @@ class General(commands.Cog, name="🛠️ Утилиты"):
         name=disnake.Localized("userinfo", key="USER_INFO_COMMAND_NAME"),
         description=disnake.Localized(
             "Shows user information.", key="USER_INFO_COMMAND_DESCRIPTION"
-        ),
-        dm_permission=False,
+        )
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     async def userinfo(
         self,
@@ -231,9 +232,9 @@ class General(commands.Cog, name="🛠️ Утилиты"):
         name=disnake.Localized("serverinfo", key="SERVER_INFO_COMMAND_NAME"),
         description=disnake.Localized(
             "Shows server information.", key="SERVER_INFO_COMMAND_DESCRIPTION"
-        ),
-        dm_permission=False,
+        )
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     async def serverinfo(self, inter: disnake.ApplicationCommandInteraction):
         await inter.response.defer(ephemeral=False)
@@ -367,8 +368,8 @@ class General(commands.Cog, name="🛠️ Утилиты"):
             "Shows the avatar of the mentioned user or the user who called the command.",
             key="AVATAR_COMMAND_DESCRIPTION",
         ),
-        dm_permission=False,
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     async def avatar(
         self,
@@ -413,9 +414,9 @@ class General(commands.Cog, name="🛠️ Утилиты"):
         name=disnake.Localized("roles", key="ROLES_LIST_COMMAND_NAME"),
         description=disnake.Localized(
             "Shows all server roles.", key="ROLES_LIST_COMMAND_DESCRIPTION"
-        ),
-        dm_permission=False,
+        )
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     async def roles(self, inter: disnake.ApplicationCommandInteraction):
         await inter.response.defer(ephemeral=False)
@@ -459,6 +460,7 @@ class General(commands.Cog, name="🛠️ Утилиты"):
             key="BOT_INFO_COMMAND_DESCRIPTION",
         ),
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     async def botinfo(self, inter: disnake.ApplicationCommandInteraction):
         await inter.response.defer(ephemeral=False)
@@ -487,11 +489,7 @@ class General(commands.Cog, name="🛠️ Утилиты"):
             .set_thumbnail(url=self.bot.user.display_avatar.url)
             .set_footer(text=self.main.FOOTER_TEXT, icon_url=self.main.FOOTER_AVATAR)
         )
-        """embed.add_field(
-            name="Дата создания:",
-            value=f"<t:{round(self.bot.user.created_at.timestamp())}:D> (<t:{round(self.bot.user.created_at.timestamp())}:R>)",
-            inline=False,
-        )"""
+
         await inter.edit_original_message(embed=embed, view=buttons.Links())
 
     @commands.slash_command(
@@ -500,6 +498,7 @@ class General(commands.Cog, name="🛠️ Утилиты"):
             "Shows bot statistics.", key="BOT_STATS_COMMAND_DESCRIPTION"
         ),
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     async def stats(self, inter: disnake.ApplicationCommandInteraction):
         await inter.response.defer(ephemeral=False)
@@ -584,6 +583,7 @@ class General(commands.Cog, name="🛠️ Утилиты"):
             "Testing bot functionality and delays.", key="BOT_PING_COMMAND_DESCRIPTION"
         ),
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     async def ping(self, inter: disnake.ApplicationCommandInteraction):
         await inter.response.defer(ephemeral=False)
@@ -600,8 +600,8 @@ class General(commands.Cog, name="🛠️ Утилиты"):
             "Displays information about any role on the server.",
             key="ROLEINFO_COMMAND_DESCRIPTION",
         ),
-        dm_permission=False,
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     async def role_info(
         self,
@@ -642,8 +642,8 @@ class General(commands.Cog, name="🛠️ Утилиты"):
             "Displays a list of members with a specific role.",
             key="CLIST_COMMAND_DESCRIPTION",
         ),
-        dm_permission=False,
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     async def clist(
         self,
@@ -688,9 +688,9 @@ class General(commands.Cog, name="🛠️ Утилиты"):
         description=disnake.Localized(
             "Finds a random emoji.", key="EMOJI_RANDOM_COMMAND_DESCRIPTION"
         ),
-        dm_permission=False,
     )
     @commands.is_nsfw()
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     async def random_emoji(self, inter: disnake.ApplicationCommandInteraction):
         await inter.response.defer(ephemeral=False)
@@ -714,8 +714,8 @@ class General(commands.Cog, name="🛠️ Утилиты"):
         description=disnake.Localized(
             "Changes the biography of the user.", key="USER_BIO_COMMAND_DESCRIPTION"
         ),
-        dm_permission=False,
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     async def bio(
         self,
@@ -752,6 +752,7 @@ class General(commands.Cog, name="🛠️ Утилиты"):
             key="MONITORING_COMMAND_DESCRIPTION",
         ),
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     async def monitoring(self, inter: disnake.ApplicationCommandInteraction):
         await inter.response.defer(ephemeral=True)
@@ -778,8 +779,8 @@ class General(commands.Cog, name="🛠️ Утилиты"):
         description=disnake.Localized(
             "Github repository information.", key="GITHUB_COMMAND_DESCRIPTION"
         ),
-        dm_permission=False,
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     async def github(
         self,

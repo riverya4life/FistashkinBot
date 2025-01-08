@@ -22,8 +22,8 @@ class Moderation(commands.Cog, name="👮🏻 Модерация"):
         description=disnake.Localized(
             "Sends a user to timeout.", key="MUTE_COMMAND_DESCRIPTION"
         ),
-        dm_permission=False,
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     @commands.has_permissions(moderate_members=True)
     @commands.bot_has_permissions(moderate_members=True)
@@ -60,8 +60,8 @@ class Moderation(commands.Cog, name="👮🏻 Модерация"):
         description=disnake.Localized(
             "Removes mute from the user.", key="UNMUTE_COMMAND_DESCRIPTION"
         ),
-        dm_permission=False,
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     @commands.has_permissions(moderate_members=True)
     @commands.bot_has_permissions(moderate_members=True)
@@ -118,8 +118,8 @@ class Moderation(commands.Cog, name="👮🏻 Модерация"):
             "Kicks the specified user from the server with the possibility of returning.",
             key="KICK_COMMAND_DESCRIPTION",
         ),
-        dm_permission=False,
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     @commands.has_permissions(kick_members=True)
     @commands.bot_has_permissions(kick_members=True)
@@ -156,8 +156,8 @@ class Moderation(commands.Cog, name="👮🏻 Модерация"):
             "Banishes the specified user from the server permanently.",
             key="BAN_COMMAND_DESCRIPTION",
         ),
-        dm_permission=False,
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     @commands.has_permissions(ban_members=True)
     @commands.bot_has_permissions(ban_members=True)
@@ -194,8 +194,8 @@ class Moderation(commands.Cog, name="👮🏻 Модерация"):
             "Unbans the specified user on the server by his ID, name or tag.",
             key="UNBAN_COMMAND_DESCRIPTION",
         ),
-        dm_permission=False,
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     @commands.has_permissions(ban_members=True)
     @commands.bot_has_permissions(ban_members=True)
@@ -271,8 +271,8 @@ class Moderation(commands.Cog, name="👮🏻 Модерация"):
         description=disnake.Localized(
             "Sets a delay for chatting.", key="DELAY_CHAT_COMMAND_DESCRIPTION"
         ),
-        dm_permission=False,
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     @commands.has_permissions(manage_channels=True)
     @commands.bot_has_permissions(manage_channels=True)
@@ -330,8 +330,8 @@ class Moderation(commands.Cog, name="👮🏻 Модерация"):
             "Clears a specified number of messages in a channel.",
             key="CLEAR_COMMAND_DESCRIPTION",
         ),
-        dm_permission=False,
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     @commands.has_permissions(manage_messages=True)
     @commands.bot_has_permissions(manage_messages=True)
@@ -352,36 +352,29 @@ class Moderation(commands.Cog, name="👮🏻 Модерация"):
             ),
         ),
     ):
-        await inter.response.defer(ephemeral=True)
         try:
-            if member:
-                check = lambda m: m.author == member
-            else:
-                check = None
-
-            deleted = await interaction.channel.purge(
-                limit=amount, check=check
-            )
-            from_member = "." if member is None else f" от участника {member.mention}."
+            await inter.response.defer(ephemeral=True)
+            check = lambda m: m.author == member if member else None
+            deleted = await inter.channel.purge(limit=amount, check=check)
+            
+            from_member = f" от участника {member.mention}." if member else "."
             clear_amount = self.enum.format_large_number(len(deleted))
-            embed = (
-                disnake.Embed(
-                    description=f"Мною очищено `{clear_amount}` сообщений в этом канале{from_member}",
-                    color=self.color.MAIN,
-                )
-                .set_author(
-                    name="Очистка чата", icon_url=inter.author.display_avatar.url
-                )
-                .set_footer(
-                    text="Команда по безопасности Discord сервера",
-                    icon_url=inter.guild.icon.url if inter.guild.icon else None,
-                )
+
+            embed = disnake.Embed(
+                description=f"Мною очищено `{clear_amount}` сообщений в этом канале{from_member}",
+                color=self.color.MAIN,
+            ).set_author(
+                name="Очистка чата", icon_url=inter.author.display_avatar.url
+            ).set_footer(
+                text="Команда по безопасности Discord сервера",
+                icon_url=inter.guild.icon.url if inter.guild.icon else None,
             )
+
             await inter.edit_original_message(embed=embed)
         except Exception as e:
             print(e)
             raise CustomError(
-                f"Не удалось очистить `{amount} сообщений`. Возможно, я не имею право на управление сообщениями или произошла ошибка."
+                f"{e} Не удалось очистить `{amount} сообщений`. Возможно, я не имею право на управление сообщениями или произошла ошибка."
             )
 
     @commands.slash_command(
@@ -389,8 +382,8 @@ class Moderation(commands.Cog, name="👮🏻 Модерация"):
         description=disnake.Localized(
             "Issue a warning to the user.", key="GIVE_WARN_COMMAND_DESCRIPTION"
         ),
-        dm_permission=False,
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     @commands.has_permissions(ban_members=True)
     @commands.bot_has_permissions(ban_members=True)
@@ -411,26 +404,17 @@ class Moderation(commands.Cog, name="👮🏻 Модерация"):
             ),
         ),
     ):
-        if member == self.bot.user:
-            raise CustomError(
-                f"❌ Ты не можешь **выдавать предупреждения** {self.bot.user.mention}!"
-            )
+        conditions = [
+            (member == self.bot.user, f"❌ Ты не можешь **выдавать предупреждения** {self.bot.user.mention}!"),
+            (member == inter.author, "❌ Ты не можешь **выдавать предупреждения** самому себе!"),
+            (member.top_role >= inter.author.top_role, "❌ Ты не можешь использовать данную команду на участников с более высокой ролью!"),
+            (member.top_role >= inter.guild.me.top_role, "❌ Роль этого бота недостаточно высока, чтобы использовать данную команду!"),
+            (member.bot, "❌ Ты не можешь взаимодействовать с ботами!")
+        ]
 
-        elif member == inter.author:
-            raise CustomError("❌ Ты не можешь **выдавать предупреждения** самому себе!")
-
-        elif member.top_role >= inter.author.top_role:
-            raise CustomError(
-                "❌ Ты не можешь использовать данную команду на участников с более высокой ролью!"
-            )
-
-        elif member.top_role >= inter.guild.me.top_role:
-            raise CustomError(
-                "❌ Роль этого бота недостаточно высока, чтобы использовать данную команду!"
-            )
-
-        elif member.bot:
-            raise CustomError("❌ Ты не можешь взаимодействовать с ботами!")
+        for condition, error_message in conditions:
+            if condition:
+                raise CustomError(error_message)
 
         warns = await db.get_warns(member)
         warnnum = 0
@@ -465,8 +449,8 @@ class Moderation(commands.Cog, name="👮🏻 Модерация"):
         description=disnake.Localized(
             "Displays all warnings issued to the user.", key="WARNS_COMMAND_DESCRIPTION"
         ),
-        dm_permission=False,
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     async def member_warns(
         self,
@@ -520,8 +504,8 @@ class Moderation(commands.Cog, name="👮🏻 Модерация"):
             "Removes all warnings issued to the user.",
             key="REMOVE_WARNS_COMMAND_DESCRIPTION",
         ),
-        dm_permission=False,
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     @commands.has_permissions(ban_members=True)
     @commands.bot_has_permissions(ban_members=True)

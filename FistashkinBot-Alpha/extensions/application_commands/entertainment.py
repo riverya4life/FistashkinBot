@@ -113,12 +113,11 @@ class Entertainment(commands.Cog, name="😄 Развлечение"):
     }
 
     ANIMALS_LIST = {
-        "Лиса": "fox",
-        "Енот": "raccoon",
-        "Кошка": "cat",
-        "Собака": "dog",
-        "Птица": "bird",
-        "Панда": "panda",
+        "🦊 Лиса": "fox",
+        "🦝 Енот": "raccoon",
+        "🐱 Кошка": "cat",
+        "🐶 Собака": "dog",
+        "🐦 Птица": "bird",
     }
 
     GUESS_GAME = {
@@ -135,6 +134,7 @@ class Entertainment(commands.Cog, name="😄 Развлечение"):
             "Answers a users question.", key="EIGHT_BALL_COMMAND_DESCRIPTION"
         ),
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     async def ball(
         self,
@@ -154,7 +154,7 @@ class Entertainment(commands.Cog, name="😄 Развлечение"):
                 value=random.choice(self.eightball.RESPONSES),
                 inline=False,
             )
-            .set_author(name="🎱 Игра 8ball")
+            .set_author(name="🎱 Шар-гадалка")
             .set_thumbnail(url=inter.author.display_avatar.url)
         )
         await inter.edit_original_message(embed=embed)
@@ -164,8 +164,8 @@ class Entertainment(commands.Cog, name="😄 Развлечение"):
         description=disnake.Localized(
             "Interact with the user.", key="INTERACTION_COMMAND_DESCRIPTION"
         ),
-        dm_permission=False,
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     async def interact(
         self,
@@ -216,6 +216,7 @@ class Entertainment(commands.Cog, name="😄 Развлечение"):
         ),
     )
     @commands.is_nsfw()
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     async def nsfw(
         self,
@@ -248,6 +249,7 @@ class Entertainment(commands.Cog, name="😄 Развлечение"):
             "Anime-chan!", key="ANIME_CHAN_COMMAND_DESCRIPTION"
         ),
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     async def anime_girl(
         self,
@@ -317,8 +319,8 @@ class Entertainment(commands.Cog, name="😄 Развлечение"):
         description=disnake.Localized(
             "Play a mini-game with rolling a dice.", key="ROLLDICE_COMMAND_DESCRIPTION"
         ),
-        dm_permission=False,
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     async def roll_dice(self, inter: disnake.ApplicationCommandInteraction):
         await inter.response.defer(ephemeral=False)
@@ -342,6 +344,7 @@ class Entertainment(commands.Cog, name="😄 Развлечение"):
             key="ANIMAL_COMMAND_DESCRIPTION",
         ),
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     async def animal(
         self,
@@ -386,110 +389,77 @@ class Entertainment(commands.Cog, name="😄 Развлечение"):
         try:
             await inter.response.defer(ephemeral=False)
             type = self.GUESS_GAME.get(choice)
-
-            item, answers, text, image, country = await fifty_api_fetch_guess(
-                category=type
-            )
+            item, answers, text, image, country = await fifty_api_fetch_guess(category=type)
             lower_answers = [answer.lower() for answer in answers]
 
             def check(message):
                 return (
-                    message.content.lower() in lower_answers
-                    and message.channel == inter.channel
+                    message.content.lower() in lower_answers and message.channel == inter.channel
                 )
 
-            guess_title = (
-                "игру 🎮"
-                if type == "game"
-                else (
-                    "город 🌇"
-                    if type == "city"
-                    else (
-                        "логотип 🍃"
-                        if type == "logo"
-                        else (
-                            "страну 🌎"
-                            if type == "country"
-                            else ("название транспорта 🚗" if type == "vehicle" else "")
-                        )
-                    )
-                )
-            )
-            guess_description = (
-                "какая игра изображена"
-                if type == "game"
-                else (
-                    "какой город изображен"
-                    if type == "city"
-                    else (
-                        "какой логотип изображен"
-                        if type == "logo"
-                        else ("какой транспорт изображен" if type == "vehicle" else "")
-                    )
-                )
-            )
-            description = None
+            guess_options = {
+                "game": ("игру 🎮", "какая игра изображена"),
+                "city": ("город 🌇", "какой город изображен"),
+                "logo": ("логотип 🍃", "какой логотип изображен"),
+                "country": ("страну 🌎", ""),
+                "vehicle": ("название транспорта 🚗", "какой транспорт изображен")
+            }
+
+            guess_title, guess_description = guess_options.get(type, ("", ""))
             percentage = random.randint(10, 100)
-            podsk = f"\nПодсказка: **{await self.gen.generation(answers[0])}**" if percentage < 50 else""
+            podsk = f"\nПодсказка: **{await self.gen.generation(answers[0])}**" if percentage < 50 else ""
             country_text = f"\nСтрана: **{country}**" if type == "city" else ""
 
-            if type == "country":
-                description = f"У вас есть **60 секунд** чтобы назвать страну по **описанию** и **картинке** с Google Maps.\n\n"
-            else:
-                description = f"У вас есть **30 секунд** чтобы ответить, {guess_description} на картинке ниже.{country_text}{podsk}"
-
-            embed = (
-                disnake.Embed(
-                    title=f"Угадай {guess_title}", color=disnake.Color.random(),
-                    description=description
-                )
-                .set_image(url=image)
-                .add_field(name="Описание", value=f"{text}.") if type == "country" else None
-                #.set_footer(text=f"DEBUG ответы: {answers}")  if inter.author.id == self.main.DEVELOPER_ID else None
+            description = (
+                f"У вас есть **60 секунд** чтобы назвать страну по **описанию** и **картинке** с Google Maps.\n\n"
+                if type == "country" else
+                f"У вас есть **30 секунд** чтобы ответить, {guess_description} на картинке ниже.{country_text}{podsk}"
             )
+
+            embed = disnake.Embed(
+                title=f"Угадай {guess_title}",
+                color=disnake.Color.random(),
+                description=description
+            ).set_image(url=image)
+
+            if type == "country":
+                embed.add_field(name="Описание", value=f"{text}.")
+
+            if inter.author.id == self.main.DEVELOPER_ID:  # Uncomment if needed
+                embed.set_footer(text=f"DEBUG ответы: {answers}")
+
             await inter.edit_original_message(embed=embed)
 
             try:
                 timeout = 60.0 if type == "country" else 30.0
-                message = await self.bot.wait_for(
-                    "message", timeout=timeout, check=check
+                try:
+                    message = await self.bot.wait_for("message", timeout=timeout, check=check)
+                    is_correct = message.content.lower() in lower_answers
+                except asyncio.TimeoutError:
+                    is_correct = False
+
+                response_color = self.color.GREEN if is_correct else self.color.RED
+                description = f"Ответ: **{answers[0]}**{country_text}"
+
+                embed = disnake.Embed(
+                    title=f"Угадай {guess_title}",
+                    description=description,
+                    color=response_color,
+                ).set_image(url=image)
+
+                response_message = (
+                    f"Победитель: **{message.author.mention}**" if is_correct else "**Победители отсутствуют**"
                 )
-                if message.content.lower() in lower_answers:
-                    embed = (
-                        disnake.Embed(
-                            title=f"Угадай {guess_title}",
-                            description=f"Ответ: **{answers[0]}**{country_text}",
-                            color=self.color.GREEN,
-                        )
-                        .set_image(url=image)
-                    )
-                    return await inter.followup.send(
-                        f"Победитель: **{message.author.mention}**", embed=embed
-                    )
-                else:
-                    embed = (
-                        disnake.Embed(
-                            title=f"Угадай {guess_title}",
-                            description=f"Ответ: **{answers[0]}**{country_text}",
-                            color=self.color.RED,
-                        )
-                        .set_image(url=image)
-                    )
-                    return await inter.followup.send(
-                        "**Победители отсувствуют**", embed=embed
-                    )
+
+                await inter.followup.send(response_message, embed=embed)
             except asyncio.TimeoutError:
-                embed = (
-                    disnake.Embed(
-                        title=f"Угадай {guess_title}",
-                        description=f"Ответ: **{answers[0]}**",
-                        color=self.color.RED,
-                    )
-                    .set_image(url=image)
-                )
-                return await inter.followup.send(
-                    "**Победители отсувствуют**", embed=embed
-                )
+                embed = disnake.Embed(
+                    title=f"Угадай {guess_title}",
+                    description=f"Ответ: **{answers[0]}**",
+                    color=self.color.RED
+                ).set_image(url=image)
+
+                await inter.followup.send("**Победители отсутствуют**", embed=embed)
         except Exception as e:
             raise CustomError(
                 f"❌ Категория **{choice}** не поддерживается или не была загружена. {e}"

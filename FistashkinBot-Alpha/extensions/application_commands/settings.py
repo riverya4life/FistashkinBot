@@ -24,8 +24,8 @@ class Settings(commands.Cog, name="⚙️ Настройки"):
         description=disnake.Localized(
             "Shows settings view.", key="SETTING_COMMAND_DESCRIPTION"
         ),
-        dm_permission=False,
     )
+    @commands.contexts(guild=True, private_channel=True)
     @commands.dynamic_cooldown(default_cooldown, type=commands.BucketType.user)
     @commands.has_permissions(administrator=True)
     @commands.bot_has_permissions(administrator=True)
